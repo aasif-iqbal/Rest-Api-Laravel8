@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ProjectCollection;
 use App\Http\Resources\ProjectResource;
 use App\Models\Project;
 use Illuminate\Http\Request;
@@ -16,9 +17,10 @@ class ProjectsController extends Controller
      */
     public function index()
     {
-       // dd(auth()->user()->id);
-        return  Project::where('user_id', auth()->user()->id)
-            ->select('id','name')->get();
+        //$projects = Project::all();
+        //show all projects to login user who get project with there resp id user_id->id(project_id)
+        $projects = Project::where('user_id', auth()->user()->id)->paginate();
+        return new ProjectCollection($projects);
     }
 
     /**
