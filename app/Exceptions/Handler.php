@@ -3,8 +3,11 @@
 namespace App\Exceptions;
 
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -59,6 +62,38 @@ class Handler extends ExceptionHandler
                     'error'=>$e->getMessage()  //This action is unauthorized
                 ], 403);    // 403 Forbidden
             }
+            if ($e instanceof ModelNotFoundException)
+            {
+                return response([
+                    'status' => 'Error',
+                    'error'=> 'Result Not Found'
+                    //'error'=>$e->getMessage()
+                ], 404);
+            }
+            if ($e instanceof  NotFoundHttpException)
+            {
+                return response([
+                    'status' => 'Error',
+                    'error'=> 'URL Not Found'
+                ], 404);
+            }
+
+            //if Sanctum user token is error or invalid
+            if ($e instanceof  AuthenticationException)
+            {
+                {
+                    return response([
+                        'status' => 'Error',
+                        'error'=>$e->getMessage()
+                    ], 401);            //unauthorized
+                }
+            }
+            return response([
+                'status'=>500,
+                'error'=>'Something Went Wrong'
+            ], 500);
+
+            //dd($e);
 
         }
         return parent::render($request, $e);
