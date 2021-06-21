@@ -16,6 +16,10 @@ class ProjectsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->authorizeResource(Project::class, 'project');
+    }
     public function index()
     {
         //$projects = Project::all();

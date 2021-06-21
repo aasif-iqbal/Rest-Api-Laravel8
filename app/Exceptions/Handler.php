@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
 use Throwable;
@@ -51,6 +52,14 @@ class Handler extends ExceptionHandler
                     'error'=> $e->errors()
                 ], 422);        //422 Unprocessable Entity
             }
+            if ($e instanceof AuthorizationException)
+            {
+                return response([
+                    'status' => 'Error',
+                    'error'=>$e->getMessage()  //This action is unauthorized
+                ], 403);    // 403 Forbidden
+            }
+
         }
         return parent::render($request, $e);
     }
