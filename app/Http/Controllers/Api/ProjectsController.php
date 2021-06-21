@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProjectRequest;
 use App\Http\Resources\ProjectCollection;
 use App\Http\Resources\ProjectResource;
 use App\Models\Project;
@@ -26,10 +27,10 @@ class ProjectsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\ProjectRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProjectRequest  $request)
     {
         $addNewProject =  auth()->user()->projects()->create($request->all());
         return new ProjectResource($addNewProject);
@@ -49,17 +50,17 @@ class ProjectsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\ProjectRequest  $request
      * @param  Project $project
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Project $project)
+    public function update(ProjectRequest $request, Project $project)
     {
         //dd($request);
         $project->update($request->all());
         //return new ProjectResource($project);
         return response(['project' => new ProjectResource($project),
-            'message' => 'Update successfully'], 200);
+                         'message' => 'Update successfully'], 200);
     }
 
     /**
