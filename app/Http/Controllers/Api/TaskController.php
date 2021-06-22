@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TaskRequest;
+use App\Models\Task;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -12,20 +14,28 @@ class TaskController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //
-    }
+//    public function index()
+//    {
+//        //
+//    }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Task $task Route Model Binding
+     * @param  App\Http\Requests\TaskRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TaskRequest $request, Task $task)
     {
-        //
+         //$task->create($request->all());
+
+         Task::create($request->all());
+
+            return response([
+                'status'=>200,
+                'message'=>'Task Added Successfully'
+            ]);
     }
 
     /**
@@ -34,21 +44,26 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
+//    public function show($id)
+//    {
+//        //
+//    }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  App\Http\Requests\TaskRequest  $request
+     * @param  Task $task Route Model Binding
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(TaskRequest $request, Task $task)
     {
-        //
+       // dd($request);
+         $task->update($request->all());
+         return response([
+             'status' => 200,
+             'message'=>'Task Updated Successfully'
+         ]);
     }
 
     /**
@@ -57,8 +72,12 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Task $task)
     {
-        //
+        $task->delete();
+        return response([
+            'status'=> 200,
+            'message'=>'Task Deleted successfully'
+        ]);
     }
 }

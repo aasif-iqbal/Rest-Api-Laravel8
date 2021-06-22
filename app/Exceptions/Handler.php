@@ -9,6 +9,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -90,14 +91,22 @@ class Handler extends ExceptionHandler
                 }
             }
 
-            if($e instanceof QueryException)
+//            if($e instanceof QueryException)
+//            {
+//                  return response([
+//                      'status' => 'Error',
+//                      'error'=>'Database Connection refused errors'
+//                  ], 502);            //Connection refused errors
+//            }
+
+            if ($e instanceof RouteNotFoundException)
             {
-                  return response([
+                return response([
                       'status' => 'Error',
-                      'error'=>'Database Connection refused errors'
-                  ], 502);            //Connection refused errors
+                      'error'=> $e->getMessage()
+                  ],404);
             }
-            //dd($e);
+           // dd($e);
             return response([
                 'status'=>500,
                 'error'=>'Something Went Wrong'
