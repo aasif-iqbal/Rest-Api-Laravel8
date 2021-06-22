@@ -30,6 +30,7 @@ Route::post('/authenticate', [\App\Http\Controllers\Api\AuthController::class, '
 
 Route::middleware('auth:sanctum')->group(function (){
     Route::apiResource('/projects', \App\Http\Controllers\Api\ProjectsController::class);
+    Route::apiResource('/tasks',\App\Http\Controllers\Api\TaskController::class)->except(['index','show']);
 });
 
 

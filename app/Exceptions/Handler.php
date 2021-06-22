@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -88,12 +89,21 @@ class Handler extends ExceptionHandler
                     ], 401);            //unauthorized
                 }
             }
+
+            if($e instanceof QueryException)
+            {
+                  return response([
+                      'status' => 'Error',
+                      'error'=>'Database Connection refused errors'
+                  ], 502);            //Connection refused errors
+            }
+            //dd($e);
             return response([
                 'status'=>500,
                 'error'=>'Something Went Wrong'
             ], 500);
 
-            //dd($e);
+
 
         }
         return parent::render($request, $e);
