@@ -12,17 +12,6 @@ class TaskPolicy
 {
     use HandlesAuthorization;
 
-    /**
-     * Determine whether the user can view any models.
-     *
-     * @param  \App\Models\User  $user
-     * @return mixed
-     */
-    public function viewAny(User $user)
-    {
-        return  false;
-    }
-
     public function create(User $user, $project_id)
     {
         //allow to create Task only if user have any project.
@@ -39,7 +28,9 @@ class TaskPolicy
      */
     public function update(User $user, Task $task)
     {
-        $project->update($request->all());
+//        dd($user->id);
+//        dd($task->project->user_id);
+        return $user->id === $task->project->user_id;
     }
 
     /**

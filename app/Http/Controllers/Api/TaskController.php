@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TaskRequest;
+use App\Http\Resources\TaskResource;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
 
 class TaskController extends Controller
 {
@@ -30,11 +33,11 @@ class TaskController extends Controller
     {
          //$task->create($request->all());
 
-        $this->authorize('create', [Task::class, $request->project_id]);
+         $this->authorize('create', [Task::class, $request->project_id]);
 
-         Task::create($request->all());
+         $task = Task::create($request->all());
 
-            return response([
+            return response( new TaskResource($task), [
                 'status'=>200,
                 'message'=>'Task Added Successfully'
             ]);
@@ -60,15 +63,15 @@ class TaskController extends Controller
      */
     public function update(TaskRequest $request, Task $task)
     {
-       // dd($request);
         $this->authorize('update', $task);
-
+        //dd($request->all());
          $task->update($request->all());
-         return response([
-             'status' => 200,
-             'message'=>'Task Updated Successfully'
-         ]);
+
+        return response(['task' => new TaskResource($task),
+            'message' => 'Task Update successfully'], 200);
     }
+
+
 
     /**
      * Remove the specified resource from storage.
@@ -81,6 +84,7 @@ class TaskController extends Controller
         $this->authorize('delete', $task);
 
         $task->delete();
+
         return response([
             'status'=> 200,
             'message'=>'Task Deleted successfully'
