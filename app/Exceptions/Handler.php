@@ -106,7 +106,7 @@ class Handler extends ExceptionHandler
                       'error'=> $e->getMessage()
                   ],404);
             }
-           // dd($e);
+            dd($e);
             return response([
                 'status'=>500,
                 'error'=>'Something Went Wrong'

@@ -30,7 +30,7 @@ class TaskController extends Controller
     {
          //$task->create($request->all());
 
-        $task->authorize('create', [Task::class, $request->project_id]);
+        $this->authorize('create', [Task::class, $request->project_id]);
 
          Task::create($request->all());
 
@@ -61,7 +61,7 @@ class TaskController extends Controller
     public function update(TaskRequest $request, Task $task)
     {
        // dd($request);
-        $task->authorize('update', $task);
+        $this->authorize('update', $task);
 
          $task->update($request->all());
          return response([
@@ -78,7 +78,7 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        $task->authorize('delete', $task);
+        $this->authorize('delete', $task);
 
         $task->delete();
         return response([
