@@ -24,7 +24,7 @@ class ProjectsController extends Controller
     {
         //$projects = Project::all();
         //show all projects to login user who get project with there resp id user_id->id(project_id)
-        $projects = Project::where('user_id', auth()->user()->id)->paginate();
+        $projects = Project::where('user_id', auth()->user()->id)->withCount('tasks')->paginate();
         return new ProjectCollection($projects);
     }
 
@@ -48,6 +48,7 @@ class ProjectsController extends Controller
      */
     public function show(Project $project)
     {
+        $task = $project->tasks; //send tasks to Project Resource
         return new ProjectResource($project);
     }
 
@@ -62,7 +63,9 @@ class ProjectsController extends Controller
     {
         //dd($request);
         $project->update($request->all());
-        //return new ProjectResource($project);
+
+        $task = $project->tasks; //send tasks to Project Resource
+
         return response(['project' => new ProjectResource($project),
                          'message' => 'Update successfully'], 200);
     }

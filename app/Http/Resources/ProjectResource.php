@@ -3,7 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use function Symfony\Component\Translation\t;
+use App\Http\Resources\TaskResource;
 
 class ProjectResource extends JsonResource
 {
@@ -19,7 +19,12 @@ class ProjectResource extends JsonResource
         return [
             'project id' => $this->id,
             'name' => $this->name,
-            'created_at' => $this->created_at
+            //getting all tasks belongs to this project.
+            'tasks' => TaskResource::collection($this->whenLoaded('tasks')),
+            //if task is not Null,it returns tasks count
+            'tasks_count' => $this->when(!is_null($this->tasks_count), $this->tasks_count),
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at
         ];
     }
 

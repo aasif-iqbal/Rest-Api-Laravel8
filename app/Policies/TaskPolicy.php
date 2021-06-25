@@ -28,8 +28,7 @@ class TaskPolicy
      */
     public function update(User $user, Task $task)
     {
-//        dd($user->id);
-//        dd($task->project->user_id);
+        //One Authorize User can update there task
         return $user->id === $task->project->user_id;
     }
 
@@ -42,7 +41,7 @@ class TaskPolicy
      */
     public function delete(User $user, Task $task)
     {
-        //User can delete task if user have project related to that task.
+        //Only Authorize User can delete task if user have task related to that project.
         return $user->id === $task->project->user_id;
     }
 }
