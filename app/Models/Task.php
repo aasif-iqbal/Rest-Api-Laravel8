@@ -22,4 +22,16 @@ class Task extends Model
          return $this->belongsTo(Project::class);
     }
 
+    /*
+     * An accessor transforms an Eloquent attribute value when it is accessed.
+     * To define an accessor, create a get{Attribute}Attribute method on your model
+     * where {Attribute} is the "studly" cased name of the column you wish to access.
+     */
+    
+    public function getPriorityAttribute()
+    {
+        //if due_date is present(or Set) then priority is High, if null Then its Low
+        return ($this->due_date) ? 'High' : 'Low';
+    }
+
 }
